@@ -1,0 +1,44 @@
+@charset "utf-8";
+// =============================================== //
+// sprite
+// ----------------------------------------------- //
+@mixin sprite-ir($sprite,$mobile:false) {
+  @include sprite-image($sprite);
+  @if $mobile {
+    @include r-sprite-position($sprite);
+    @include r-sprite-width($sprite);
+    @include r-sprite-size($sprite);
+    padding-top: nth($sprite, 6)/2;
+  } @else {
+    @include sprite-position($sprite);
+    @include sprite-width($sprite);
+    padding-top: nth($sprite, 6);
+    background-size: auto;
+  }
+  height: 0;
+  overflow: hidden;
+  display: block;
+}
+// =============================================== //
+// Media Query
+// ----------------------------------------------- //
+@mixin mediaSmall {
+  @media only screen and (max-width: $width-small + $width-scrollbar - 1) {
+    @content;
+  }
+}
+@mixin mediaMedium {
+  @media only screen and (min-width: $width-small + $width-scrollbar - 1) and (max-width: $width-medium + $width-scrollbar - 1) {
+    @content;
+  }
+}
+// =============================================== //
+// clearfix
+// ----------------------------------------------- //
+%group{
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}

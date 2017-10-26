@@ -1,0 +1,245 @@
+'use strict';
+
+// LIBRARIES
+// - - - - - - - - - - - - - - -
+const bulkSass        = require('gulp-sass-bulk-import');
+const buffer          = require('vinyl-buffer');
+const gulp            = require('gulp');
+const gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
+const connectSSI      = require('connect-ssi');
+const browserSync     = require('browser-sync');
+const pngquant        = require('imagemin-pngquant');
+const fractal         = require('@frctl/fractal').create();
+const webpackStream   = require('webpack-stream');
+const named           = require('vinyl-named');
+const pugLinter       = require('gulp-pug-linter');
+
+// 2. VARIABLES
+// - - - - - - - - - - - - - - -
+const bsProxy      = false;
+const rootPath     = './';
+const srcPath      = './src/';
+const distPath     = './dist/';
+const nodePath     = './node_modules/';
+const htmlPath     = distPath + '/';
+const cssPath      = distPath + '/css/';
+const docsPath     = srcPath + '/docs/';
+const docsDistPath = distPath + '/docs/';
+const fontPath     = srcPath + '/fonts/';
+const pugPath      = srcPath + '/pug/';
+const imgPath      = srcPath + '/img/';
+const imgDistPath  = distPath + '/img/';
+const scssPath     = srcPath + '/scss/';
+const jsPath       = srcPath + '/js/';
+
+// fractal
+fractal.set('StyleGuide', 'Component Library');
+fractal.components.set('path', docsPath + 'components');
+fractal.docs.set('path', docsPath);
+fractal.web.set('static.path', docsDistPath + '/public');
+fractal.web.set('builder.dest', docsDistPath);
+const logger = fractal.cli.console;
+
+// SERVER
+// - - - - - - - - - - - - - - -
+gulp.task('browser-sync', function() {
+  browserSync({
+    server: {
+      baseDir: rootPath,
+      middleware: [
+        connectSSI({
+          baseDir: __dirname + "/",
+          ext: ".html"
+        })
+      ]
+    },
+    proxy: bsProxy,
+    ghostMode: {
+      location: true
+    }
+  });
+});
+
+// PUG
+// - - - - - - - - - - - - - - -
+gulp.task('pug', function() {
+  return gulp.src([pugPath + '**/!(_)*.pug'])
+    .pipe(gulpLoadPlugins.pugLinter())
+    .pipe(gulpLoadPlugins.pugLinter.reporter())
+    .pipe(gulpLoadPlugins.data(function() {
+      return require(pugPath + 'setting.json')
+    }))
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(gulpLoadPlugins.changed(htmlPath, {
+      extension: '.html',
+      hashChanged: gulpLoadPlugins.changed.compareSha1Digest
+    }))
+    .pipe(gulpLoadPlugins.pug({ pretty: true }))
+    .pipe(gulp.dest(htmlPath))
+    .pipe(browserSync.reload({ stream: true }));
+});
+
+// STYLESHEET
+// - - - - - - - - - - - - - - -
+gulp.task('sass', function() {
+  return gulp.src(scssPath + '**/*.scss')
+    .pipe(gulpLoadPlugins.plumber({
+      errorHandler: handleErrors
+    }))
+    .pipe(bulkSass())
+    .pipe(gulpLoadPlugins.sass({
+      includePaths: [
+        nodePath + 'font-awesome/scss'
+      ]
+    }))
+    .pipe(gulpLoadPlugins.pleeease({
+      "autoprefixer": {"browsers": ["last 4 versions", "ie 10", "ie 9"]},
+      "minifier": false
+    }))
+    .pipe(gulpLoadPlugins.csscomb())
+    .pipe(gulpLoadPlugins.csslint())
+    .pipe(gulp.dest(cssPath))
+    .pipe(gulpLoadPlugins.rename({
+      suffix: '.min'
+    }))
+    .pipe(gulpLoadPlugins.csso())
+    .pipe(gulp.dest(cssPath))
+    .pipe( browserSync.reload( { stream:true } ) );
+});
+
+// JAVASCRIPT
+// - - - - - - - - - - - - - - -
+gulp.task('webpack', function() {
+  return gulp.src(jsPath + '/app.js')
+    .pipe(named())
+    .pipe(webpackStream({
+      watch: true,
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loaders: [
+              'babel-loader',
+              'eslint-loader'
+            ]
+          }
+        ]
+      },
+      devtool: 'source-map'
+    }))
+    .pipe(gulp.dest(distPath + '/js/'));
+});
+
+// SPRITE
+// - - - - - - - - - - - - - - -
+gulp.task('sprite', function() {
+  var spriteData = gulp.src(imgPath + 'sprite/*.png')
+    .pipe(gulpLoadPlugins.spritesmith({
+      imgName: 'sprite.png',
+      imgPath: imgPath + 'sprite.png',
+      cssName: '_sprite.scss',
+      cssTemplate: '.sprite-template',
+      algorithm:'top-down',
+      padding: 20,
+      algorithmOpts : {
+        sort: false
+      }
+    }));
+
+  // minify images
+  spriteData.img
+    .pipe(buffer())
+    .pipe(gulp.dest(imgPath))
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({quality: '70-80', speed: 1})]
+    }))
+    .pipe(gulp.dest(imgDistPath))
+    .pipe(browserSync.reload({ stream:true }));
+
+  // compile scss
+  spriteData.css
+    .pipe(gulp.dest(scssPath + 'foundation/'))
+    .pipe(browserSync.reload({ stream:true }));
+});
+
+// STYLE GUIDE
+// - - - - - - - - - - - - - - -
+gulp.task('fractal:start', function(){
+  const server = fractal.web.server({
+    sync: true,
+    port: 4000
+  });
+  server.on('error', err => logger.error(err.message));
+  return server.start().then(() => {
+    logger.success(`Fractal server is now running at ${server.url}`);
+  });
+});
+
+gulp.task('fractal:build', function(){
+  const builder = fractal.web.builder();
+  builder.on('progress', (completed, total) => logger.update(`Exported ${completed} of ${total} items`, 'info'));
+  builder.on('error', err => logger.error(err.message));
+  return builder.build().then(() => {
+    logger.success('Fractal build completed!');
+  });
+});
+
+// IMAGE
+// - - - - - - - - - - - - - - -
+gulp.task('imagemin', function() {
+  return gulp.src(imgPath + '**/*.+(jpg|jpeg|png|gif|svg)', {base:imgPath})
+    .pipe(gulpLoadPlugins.imagemin({
+      progressive: true,
+      use: [pngquant({ quality: '70-80', speed: 1 })]
+    }))
+    .pipe(gulp.dest(imgDistPath))
+});
+
+// FONTS
+// - - - - - - - - - - - - - - -
+gulp.task('fonts', function() {
+  return gulp.src( nodePath + 'font-awesome/fonts/*' )
+    .pipe(gulp.dest(fontPath))
+});
+
+// TASKS
+// - - - - - - - - - - - - - - -
+// Watch tasks
+gulp.task('watch', function() {
+  // Watch Pug
+  gulpLoadPlugins.watch([pugPath + '*', pugPath + '**/*'], function(){
+    gulp.start('pug');
+  });
+
+  // Watch Sprite
+  gulpLoadPlugins.watch([imgPath + 'sprite/*.png'], function(){
+    gulp.start('sprite');
+  });
+
+  // Watch Sass
+  gulpLoadPlugins.watch([scssPath + '*', scssPath + '**/*'], function(){
+    gulp.start('sass');
+  });
+});
+
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
+
+gulp.task('dist', ['pug', 'scss', 'webpack', 'sprite', 'imagemin', 'fractal:build']);
+
+
+
+// FUNCTIONS
+// - - - - - - - - - - - - - - -
+function handleErrors() {
+  var args = Array.prototype.slice.call(arguments);
+  gulpLoadPlugins.notify.onError({
+    title: 'Compile Error',
+    message: '<%= error.message %>'
+  }).apply(this, args);
+  this.emit('end');
+}
+

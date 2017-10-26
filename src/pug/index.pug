@@ -1,0 +1,17 @@
+extends inc/core/_base.pug
+include inc/core/_config.pug
+block title
+  - var title = page.top.title
+  title= title
+block prepend meta
+  - var sitename = name
+  - var keywords = page.top.keywords
+  - var description = page.top.description
+  - var ogimage = page.top.ogimage
+  - var bodyClass = 'home'
+block append meta
+block body
+  .l-container
+    include inc/layout/_header
+  include inc/layout/_footer
+block append scriptFooter

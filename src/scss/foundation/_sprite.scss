@@ -1,0 +1,51 @@
+$test-name: 'test';
+$test-x: 0px;
+$test-y: 0px;
+$test-offset-x: 0px;
+$test-offset-y: 0px;
+$test-width: 256px;
+$test-height: 256px;
+$test-total-width: 256px;
+$test-total-height: 256px;
+$test-image: './src//img/sprite.png';
+$test: (0px, 0px, 0px, 0px, 256px, 256px, 256px, 256px, './src//img/sprite.png', 'test', );
+$spritesheet-width: 256px;
+$spritesheet-height: 256px;
+$spritesheet-image: './src//img/sprite.png';
+$spritesheet-sprites: ($test, );
+$spritesheet: (256px, 256px, './src//img/sprite.png', $spritesheet-sprites, );
+
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}
