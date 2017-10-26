@@ -22,3 +22,4 @@ bower_components/
 *.swp
 *.un~
 *.log
+.keep
