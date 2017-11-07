@@ -7,6 +7,7 @@
   "license": "MIT",
   "description": "frontend startkit.",
   "scripts": {
+    "install": "gulp install",
     "watch": "NODE_ENV=development gulp",
     "build": "NODE_ENV=production gulp dist"
   },
@@ -54,6 +55,7 @@
     "@frctl/fractal": "^1.1.7",
     "font-awesome": "^4.7.0",
     "gulp-if": "^2.0.2",
+    "gulp-replace": "^0.6.1",
     "imagesloaded": "^4.1.3",
     "minimist": "^1.2.0",
     "normalize.css": "^7.0.0",

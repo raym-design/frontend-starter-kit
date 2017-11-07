@@ -13,7 +13,6 @@ const plugins = [
   })
 ];
 
-console.log(PRODUCTION)
 if(PRODUCTION){
   plugins.push(
     new webpack.optimize.UglifyJsPlugin()

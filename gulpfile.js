@@ -195,9 +195,16 @@ gulp.task('imagemin', function() {
 
 // FONTS
 // - - - - - - - - - - - - - - -
-gulp.task('fonts', function() {
+gulp.task('fontawesome:copy', function() {
   return gulp.src( nodePath + 'font-awesome/fonts/*' )
     .pipe(gulp.dest(fontPath))
+    .pipe(gulp.dest(distPath + 'fonts/'))
+});
+
+gulp.task('fontawesome:replace', function() {
+  return gulp.src( scssPath + 'app.scss' )
+    .pipe(gulpLoadPlugins.replace('// @import "font-awesome";', '@import "font-awesome";'))
+    .pipe(gulp.dest(scssPath))
 });
 
 // TASKS
@@ -219,6 +226,8 @@ gulp.task('watch', function() {
     gulp.start('sass');
   });
 });
+
+gulp.task('install', ['fontawesome:copy', 'fontawesome:replace'] );
 
 gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
 
