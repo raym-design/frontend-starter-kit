@@ -162,7 +162,7 @@ gulp.task('sprite', function() {
 
   // compile scss
   spriteData.css
-    .pipe(gulp.dest(scssPath + 'foundation/'))
+    .pipe(gulp.dest(scssPath + 'foundation/mixins/'))
     .pipe(browserSync.reload({ stream:true }));
 });
 

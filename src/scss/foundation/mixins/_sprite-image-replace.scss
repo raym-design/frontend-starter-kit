@@ -1,0 +1,21 @@
+@charset "utf-8";
+// =============================================== //
+// sprite-image-replace
+// ----------------------------------------------- //
+@mixin sprite-ir($sprite,$mobile:false) {
+  @include sprite-image($sprite);
+  @if $mobile {
+    @include r-sprite-position($sprite);
+    @include r-sprite-width($sprite);
+    @include r-sprite-size($sprite);
+    padding-top: nth($sprite, 6)/2;
+  } @else {
+    @include sprite-position($sprite);
+    @include sprite-width($sprite);
+    padding-top: nth($sprite, 6);
+    background-size: auto;
+  }
+  height: 0;
+  overflow: hidden;
+  display: block;
+}

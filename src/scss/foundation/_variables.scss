@@ -7,7 +7,25 @@ $fontCode   : monospace, "ＭＳ Ｐ ゴシック","MS PGothic", "ヒラギノ�
 // font-awesome
 $fa-font-path: "node-modules/font-awesome/fonts";
 
-// device
-$width-medium: 640px;
-$width-small: 640px;
-$width-scrollbar: 20px;
+// z-index
+$z-map-reverse: false !default;
+$z-map: (
+  front: true,
+  header: true,
+  menu: true,
+  modal: (
+    button: true,
+    images: (
+      mask: true,
+      body: true
+    ),
+    close: true
+  )
+) !default;
+
+// Breakpoint
+$screen: (
+  sm: 544px,
+  md: 749px,
+  lg: 992px
+) !default;
