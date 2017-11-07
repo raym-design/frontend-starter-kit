@@ -2,35 +2,48 @@
 
 // LIBRARIES
 // - - - - - - - - - - - - - - -
+const browserSync     = require('browser-sync');
 const bulkSass        = require('gulp-sass-bulk-import');
 const buffer          = require('vinyl-buffer');
-const gulp            = require('gulp');
-const gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
 const connectSSI      = require('connect-ssi');
-const browserSync     = require('browser-sync');
-const pngquant        = require('imagemin-pngquant');
 const fractal         = require('@frctl/fractal').create();
-const webpackStream   = require('webpack-stream');
+const gulp            = require('gulp');
+const gulpif          = require('gulp-if');
+const gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
 const named           = require('vinyl-named');
+const pngquant        = require('imagemin-pngquant');
 const pugLinter       = require('gulp-pug-linter');
+const webpack         = require('webpack');
+const webpackStream   = require('webpack-stream');
+const webpackConfig   = require('./webpack.config.js');
+const minimist        = require('minimist');
 
-// 2. VARIABLES
+// VARIABLES
 // - - - - - - - - - - - - - - -
-const bsProxy      = false;
-const rootPath     = './';
-const srcPath      = './src/';
-const distPath     = './dist/';
-const nodePath     = './node_modules/';
-const htmlPath     = distPath + '/';
-const cssPath      = distPath + '/css/';
-const docsPath     = srcPath + '/docs/';
-const docsDistPath = distPath + '/docs/';
-const fontPath     = srcPath + '/fonts/';
-const pugPath      = srcPath + '/pug/';
-const imgPath      = srcPath + '/img/';
-const imgDistPath  = distPath + '/img/';
-const scssPath     = srcPath + '/scss/';
-const jsPath       = srcPath + '/js/';
+const bsProxy         = false;
+const rootPath        = './';
+const srcPath         = './src/';
+const distPath        = './dist/';
+const nodePath        = './node_modules/';
+const htmlPath        = distPath + '/';
+const pugPath         = srcPath + '/pug/';
+const cssPath         = distPath + '/css/';
+const scssPath        = srcPath + '/scss/';
+const imgPath         = srcPath + '/img/';
+const imgDistPath     = distPath + '/img/';
+const jsPath          = srcPath + '/js/';
+const fontPath        = srcPath + '/fonts/';
+const docsPath        = srcPath + '/docs/';
+const docsDistPath    = distPath + '/docs/';
+
+// env
+const envOption = {
+  string: 'env',
+  default: { env: process.env.NODE_ENV || 'development' }
+};
+const processOptions  = minimist(process.argv.slice(2), envOption);
+const isProduction = (processOptions.env === 'production') ? true : false;
+console.log('[build env]', processOptions.env, '[is production]', isProduction);
 
 // fractal
 fractal.set('StyleGuide', 'Component Library');
@@ -78,7 +91,7 @@ gulp.task('pug', function() {
     }))
     .pipe(gulpLoadPlugins.pug({ pretty: true }))
     .pipe(gulp.dest(htmlPath))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(gulpif(!isProduction, browserSync.reload({stream:true})));
 });
 
 // STYLESHEET
@@ -100,13 +113,9 @@ gulp.task('sass', function() {
     }))
     .pipe(gulpLoadPlugins.csscomb())
     .pipe(gulpLoadPlugins.csslint())
+    .pipe(gulpif(isProduction, gulpLoadPlugins.csso()))
     .pipe(gulp.dest(cssPath))
-    .pipe(gulpLoadPlugins.rename({
-      suffix: '.min'
-    }))
-    .pipe(gulpLoadPlugins.csso())
-    .pipe(gulp.dest(cssPath))
-    .pipe( browserSync.reload( { stream:true } ) );
+    .pipe(gulpif(!isProduction, browserSync.reload({stream:true})));
 });
 
 // JAVASCRIPT
@@ -114,22 +123,7 @@ gulp.task('sass', function() {
 gulp.task('webpack', function() {
   return gulp.src(jsPath + '/app.js')
     .pipe(named())
-    .pipe(webpackStream({
-      watch: true,
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loaders: [
-              'babel-loader',
-              'eslint-loader'
-            ]
-          }
-        ]
-      },
-      devtool: 'source-map'
-    }))
+    .pipe(webpackStream(webpackConfig, webpack))
     .pipe(gulp.dest(distPath + '/js/'));
 });
 
@@ -228,7 +222,7 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
 
-gulp.task('dist', ['pug', 'scss', 'webpack', 'sprite', 'imagemin', 'fractal:build']);
+gulp.task('dist', ['pug', 'sass', 'webpack', 'sprite', 'imagemin', 'fractal:build']);
 
 
 
