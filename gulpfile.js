@@ -6,7 +6,8 @@ const browserSync     = require('browser-sync');
 const bulkSass        = require('gulp-sass-bulk-import');
 const buffer          = require('vinyl-buffer');
 const connectSSI      = require('connect-ssi');
-const fractal         = require('@frctl/fractal').create();
+const fractal         = require('./fractal.config.js')
+const logger          = fractal.cli.console;
 const gulp            = require('gulp');
 const gulpif          = require('gulp-if');
 const gulpLoadPlugins = require('gulp-load-plugins')({ pattern: ['gulp-*', 'gulp.*'] });
@@ -44,14 +45,6 @@ const envOption = {
 const processOptions  = minimist(process.argv.slice(2), envOption);
 const isProduction = (processOptions.env === 'production') ? true : false;
 console.log('[build env]', processOptions.env, '[is production]', isProduction);
-
-// fractal
-fractal.set('StyleGuide', 'Component Library');
-fractal.components.set('path', docsPath + 'components');
-fractal.docs.set('path', docsPath);
-fractal.web.set('static.path', docsDistPath + '/public');
-fractal.web.set('builder.dest', docsDistPath);
-const logger = fractal.cli.console;
 
 // SERVER
 // - - - - - - - - - - - - - - -
@@ -136,9 +129,9 @@ gulp.task('sprite', function() {
       imgPath: imgPath + 'sprite.png',
       cssName: '_sprite.scss',
       cssTemplate: '.sprite-template',
-      algorithm:'top-down',
+      algorithm: 'top-down',
       padding: 20,
-      algorithmOpts : {
+      algorithmOpts: {
         sort: false
       }
     }));
@@ -147,11 +140,6 @@ gulp.task('sprite', function() {
   spriteData.img
     .pipe(buffer())
     .pipe(gulp.dest(imgPath))
-    .pipe(gulpLoadPlugins.imagemin({
-      progressive: true,
-      use: [pngquant({quality: '70-80', speed: 1})]
-    }))
-    .pipe(gulp.dest(imgDistPath))
     .pipe(browserSync.reload({ stream:true }));
 
   // compile scss
@@ -196,7 +184,7 @@ gulp.task('imagemin', function() {
 // FONTS
 // - - - - - - - - - - - - - - -
 gulp.task('fontawesome:copy', function() {
-  return gulp.src( nodePath + 'font-awesome/fonts/*' )
+  return gulp.src(nodePath + 'font-awesome/fonts/*')
     .pipe(gulp.dest(fontPath))
     .pipe(gulp.dest(distPath + 'fonts/'))
 });
@@ -227,13 +215,11 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('install', ['fontawesome:copy', 'fontawesome:replace'] );
+gulp.task('build', ['fontawesome:copy', 'fontawesome:replace']);
 
-gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack'] );
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack']);
 
 gulp.task('dist', ['pug', 'sass', 'webpack', 'sprite', 'imagemin', 'fractal:build']);
-
-
 
 // FUNCTIONS
 // - - - - - - - - - - - - - - -

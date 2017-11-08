@@ -7,9 +7,6 @@ const plugins = [
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     }
-  }),
-  new webpack.ProvidePlugin({
-    $: 'jquery'
   })
 ];
 
@@ -25,6 +22,9 @@ const config = {
   output: {
     filename: 'build.js',
     path: path.join(__dirname, 'dist/js')
+  },
+  externals: {
+    jquery: 'jQuery'
   },
   module: {
     rules: [{
@@ -43,7 +43,7 @@ const config = {
       loader: 'eslint-loader',
     }]
   },
-  devtool: 'source-map',
+  devtool: PRODUCTION ? '' : 'source-map',
   plugins: plugins
 };
 
