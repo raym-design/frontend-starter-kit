@@ -1,5 +1,12 @@
 フロントエンド開発用のスターターキットです。
 
+## Guidelines
+
+- [HTMLについて](https://github.com/regret/frontend-starter-kit/wiki/HTML%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+- [JavaScriptについて](https://github.com/regret/frontend-starter-kit/wiki/JavaScript%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+- [Sassについて](https://github.com/regret/frontend-starter-kit/wiki/Sass%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
+- [ファイル名の命名規則](https://github.com/regret/frontend-starter-kit/wiki/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%AE%E5%91%BD%E5%90%8D%E8%A6%8F%E5%89%87)
+
 ***
 
 ## Features
@@ -67,12 +74,6 @@ $ yarn run start
 # Deploy for production
 $ yarn run dist
 ```
-
-***
-
-## Guidelines
-
-- [Coding Guidelines](https://github.com/regret/frontend-starter-kit/wiki/Coding-Guidelines)
 
 ***
 
