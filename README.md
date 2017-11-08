@@ -70,6 +70,12 @@ $ yarn run dist
 
 ***
 
+## Guidelines
+
+- [Coding Guidelines](https://github.com/regret/frontend-starter-kit)
+
+***
+
 ## Directory Structure
 
 ```
