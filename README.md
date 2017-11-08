@@ -72,7 +72,7 @@ $ yarn run dist
 
 ## Guidelines
 
-- [Coding Guidelines](https://github.com/regret/frontend-starter-kit)
+- [Coding Guidelines](https://github.com/regret/frontend-starter-kit/wiki/Coding-Guidelines)
 
 ***
 
