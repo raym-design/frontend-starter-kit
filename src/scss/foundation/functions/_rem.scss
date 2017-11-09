@@ -1,7 +1,7 @@
 @charset "utf-8";
 // =============================================== //
-// font-size
+// rem
 // ----------------------------------------------- //
-@function fz( $size, $base: 10 ) {
+@function rem( $size, $base: 10 ) {
   @return ( $size / $base ) + rem;
 }
