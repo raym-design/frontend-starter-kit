@@ -123,7 +123,7 @@ gulp.task('webpack', function() {
 // SPRITE
 // - - - - - - - - - - - - - - -
 gulp.task('sprite', function() {
-  var spriteData = gulp.src(imgPath + 'sprite/*.png')
+  let spriteData = gulp.src(imgPath + 'sprite/*.png')
     .pipe(gulpLoadPlugins.spritesmith({
       imgName: 'sprite.png',
       imgPath: imgPath + 'sprite.png',
@@ -224,7 +224,7 @@ gulp.task('dist', ['pug', 'sass', 'webpack', 'sprite', 'imagemin', 'fractal:buil
 // FUNCTIONS
 // - - - - - - - - - - - - - - -
 function handleErrors() {
-  var args = Array.prototype.slice.call(arguments);
+  let args = Array.prototype.slice.call(arguments);
   gulpLoadPlugins.notify.onError({
     title: 'Compile Error',
     message: '<%= error.message %>'
