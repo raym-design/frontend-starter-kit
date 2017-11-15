@@ -16,7 +16,8 @@ const pngquant        = require('imagemin-pngquant');
 const pugLinter       = require('gulp-pug-linter');
 const webpack         = require('webpack');
 const webpackStream   = require('webpack-stream');
-const webpackConfig   = require('./webpack.config.js');
+const webpackDevConfig  = require('./webpack.dev.js');
+const webpackProdConfig = require('./webpack.prod.js');
 const minimist        = require('minimist');
 
 // VARIABLES
@@ -113,10 +114,17 @@ gulp.task('sass', function() {
 
 // JAVASCRIPT
 // - - - - - - - - - - - - - - -
-gulp.task('webpack', function() {
+gulp.task('webpack:dev', function() {
   return gulp.src(jsPath + '/app.js')
     .pipe(named())
-    .pipe(webpackStream(webpackConfig, webpack))
+    .pipe(webpackStream(webpackDevConfig, webpack))
+    .pipe(gulp.dest(distPath + '/js/'));
+});
+
+gulp.task('webpack:prod', function() {
+  return gulp.src(jsPath + '/app.js')
+    .pipe(named())
+    .pipe(webpackStream(webpackProdConfig, webpack))
     .pipe(gulp.dest(distPath + '/js/'));
 });
 
@@ -217,9 +225,9 @@ gulp.task('watch', function() {
 
 gulp.task('build', ['fontawesome:copy', 'fontawesome:replace']);
 
-gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack']);
+gulp.task('default', ['browser-sync', 'sprite', 'watch', 'webpack:dev']);
 
-gulp.task('dist', ['pug', 'sass', 'webpack', 'sprite', 'imagemin', 'fractal:build']);
+gulp.task('dist', ['pug', 'sass', 'webpack:prod', 'sprite', 'imagemin', 'fractal:build']);
 
 // FUNCTIONS
 // - - - - - - - - - - - - - - -
