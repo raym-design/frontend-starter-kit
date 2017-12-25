@@ -1,18 +1,32 @@
 doctype html
-html(xmlns:og="http://ogp.me/ns#", xmlns:fb='https://www.facebook.com/2008/fbml')
-  head
+html(lang="ja")
+  head(prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#")
     meta(charset='UTF-8')
     block title
     block meta
-      meta(name='description', content=description)
-      meta(name='keywords', content=keywords)
+      if description
+        meta(name='description', content=description)
+      if keywords
+        meta(name='keywords', content=keywords)
+    block ogp
+      meta(property='og:type',content='website')
+      meta(property='og:locale', content='ja_JP')
+      meta(property='og:site_name', content=sitename)
+      meta(property='og:title' content=title)
+      if description
+        meta(property='og:description' content=description)
+      if url
+        meta(property='og:url' content=url)
+      if ogimage
+        meta(property='og:image' content=ogimage)
+      if app_id
+        meta(property='fb:app_id' content=app_id)
     block link
       link(rel='icon', href='/favicon.ico')
       link(rel='shortcut icon', href='/favicon.ico')
       link(rel='apple-touch-icon', href='/apple-touch-icon.png')
-      link(rel='stylesheet', href='app.css')
-  body(class=bodyClass)
-    #fb-root
+      link(rel='stylesheet', href='css/app.css')
+  body
     block body
     block scriptFooter
       script(src="js/build.js")

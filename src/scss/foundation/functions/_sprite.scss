@@ -1,0 +1,23 @@
+@charset "utf-8";
+@function icon-file-exists($sprites, $icon) {
+  $icon: map-get($sprites, $icon);
+  @if $icon == null {
+    @return false;
+  } @else {
+    @return true;
+  }
+}
+
+@function icon-attr($icon) {
+  $attr: (
+    width: map-get($icon, width),
+    height: map-get($icon, height),
+    x: map-get($icon, backgroundX),
+    y: map-get($icon, backgroundY),
+    retinaWidth: map-get($icon, width) / 2,
+    retinaHeight: map-get($icon, height) / 2,
+    retinaX: map-get($icon, backgroundX) / 2,
+    retinaY: map-get($icon, backgroundY) / 2,
+  );
+  @return $attr;
+}

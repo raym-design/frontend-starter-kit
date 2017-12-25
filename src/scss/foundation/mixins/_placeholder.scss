@@ -1,7 +1,5 @@
 @charset "utf-8";
-// =============================================== //
-// Placeholder
-// ----------------------------------------------- //
+// @include placeholder();
 @mixin placeholder {
   &::-webkit-input-placeholder {
     @content;

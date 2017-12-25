@@ -1,7 +1,4 @@
 @charset "utf-8";
-// =============================================== //
-// responsive iframe
-// ----------------------------------------------- //
 @mixin iframe($width, $height) {
   position: relative;
   overflow: hidden;

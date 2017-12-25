@@ -1,9 +1,5 @@
 @charset "utf-8";
-// =============================================== //
-// z-index
-// ## read
-// https://github.com/kojika17/fawn/blob/master/core/fawn/functions/_z-index.scss
-// ----------------------------------------------- //
+// z-index: z($name);
 @function z($options...) {
   $option-length: length($options);
   $point: 1;

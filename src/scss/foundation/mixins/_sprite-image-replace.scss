@@ -1,21 +1,35 @@
 @charset "utf-8";
-// =============================================== //
-// sprite-image-replace
-// ----------------------------------------------- //
-@mixin sprite-ir($sprite,$mobile:false) {
-  @include sprite-image($sprite);
-  @if $mobile {
-    @include r-sprite-position($sprite);
-    @include r-sprite-width($sprite);
-    @include r-sprite-size($sprite);
-    padding-top: nth($sprite, 6)/2;
+// @include sprite-ir(iconname);
+// @include sprite-ir(iconname, $svg:true);
+// @include sprite-ir(iconname, $mobile:true);
+@mixin sprite-ir($icon, $mobile:false, $svg:false) {
+  $sprites: false;
+  @if $svg {
+    $sprites: $sprites-svg;
   } @else {
-    @include sprite-position($sprite);
-    @include sprite-width($sprite);
-    padding-top: nth($sprite, 6);
-    background-size: auto;
+    $sprites: $sprites-png;
   }
-  height: 0;
-  overflow: hidden;
-  display: block;
+  @if icon-file-exists($sprites, $icon) {
+    $spriteMap: map-get($sprites, sprite);
+    $iconMap: map-get($sprites, $icon);
+    $iconAttr: icon-attr($iconMap);
+    background-image: url(map-get($spriteMap, imgPath));
+    background-repeat: no-repeat;
+    @if $mobile {
+      background-position: map-get($iconAttr, retinaX) map-get($iconAttr, retinaY) ;
+      background-size: (map-get($spriteMap, width) / 2) (map-get($spriteMap, height) / 2);
+      width: map-get($iconAttr, retinaWidth);
+      padding-top: map-get($iconAttr, retinaHeight);
+    } @else {
+      background-position: map-get($iconAttr, x) map-get($iconAttr, y) ;
+      background-size: map-get($spriteMap, width) map-get($spriteMap, height);
+      width: map-get($iconAttr, width);
+      padding-top: map-get($iconAttr, height);
+    }
+    display: inline-block;
+    overflow: hidden;
+    height: 0;
+  } @else {
+    @warn "Can't find an icon with the name #{$icon}";
+  }
 }

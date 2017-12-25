@@ -1,0 +1,14 @@
+$sprites-svg: (
+  sprite: (
+    width: {{spriteWidth}}px,
+    height: {{spriteHeight}}px,
+    imgPath: '../img/sprite.svg'
+  ),
+{{#shapes}}
+  {{base}}: (
+    width: {{width.outer}}px,
+    height: {{height.outer}}px,
+    backgroundX: {{position.absolute.x}}px,
+    backgroundY: {{position.absolute.y}}px,
+  ),
+{{/shapes}});

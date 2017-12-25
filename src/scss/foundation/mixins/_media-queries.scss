@@ -1,7 +1,5 @@
 @charset "utf-8";
-// =============================================== //
-// media-queries
-// ----------------------------------------------- //
+// @include mq(sm) {}
 @mixin mq($size, $width: max) {
   $result: 0;
   @if(type-of($size) == number) {

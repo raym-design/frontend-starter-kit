@@ -1,7 +1,5 @@
 @charset "utf-8";
-// =============================================== //
-// media-queries-only
-// ----------------------------------------------- //
+// @include mq-only(sm) {}
 @mixin mq-only($options...) {
 
   $len: length($options);

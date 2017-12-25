@@ -1,13 +1,4 @@
-フロントエンド開発用のスターターキットです。
-
-## Guidelines
-
-- [HTMLについて](https://github.com/regret/frontend-starter-kit/wiki/HTML%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
-- [JavaScriptについて](https://github.com/regret/frontend-starter-kit/wiki/JavaScript%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
-- [Sassについて](https://github.com/regret/frontend-starter-kit/wiki/Sass%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
-- [ファイル名の命名規則](https://github.com/regret/frontend-starter-kit/wiki/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%AE%E5%91%BD%E5%90%8D%E8%A6%8F%E5%89%87)
-
-***
+Starter kit for front end development.
 
 ## Features
 
@@ -24,49 +15,48 @@
 - normalize.css
 - Sass（node-sass）
     - sass-bulk-import
-- Pleeease
-- CSScomb
-- CSS Sprite
-- CSSLint
+    - node-sass-package-importer
+    - sourcemaps
+    - csso
+    - postcss
+        - autoprefixer
+        - css-mqpacker
+- Sprite(png/svg)
 
 ### JavaScript
 - BabelJS
 - ESLint(eslint-config-airbnb)
-- jQuery
-- imagesloaded
-
-### Fonts
-- font-awesome
 
 ### Images
-- imagemin-pngquant（70-80%）
+- imagemin
+    - pngquant
+    - mozjpeg
+    - svgo
+    - optipng
+    - gifsicle
 
-### Style Guide
+### Component Guide
 - fractal
 
 ***
 
 ## Requirements
 
-- `node` >= 5.12
+- `node` >= 9.3.0
 - `gulp` >= 3.9.1
-- `sass` >= 3.4
+- `sass` >= 3.4.24
 
 ***
 
 ## Getting Started
 
-
 ```
 # clone
-$ git clone git@github.com:regret/frontend-starter-kit.git
+$ git clone git@github.com:raym-design/frontend-starter-kit.git
 $ cd frontend-starter-kit
 
 # Install Dependencies
 $ yarn install
-
-# Install library
-$ yarn run build
 
 # Run the Application
 $ yarn run start
@@ -80,24 +70,29 @@ $ yarn run dist
 ## Directory Structure
 
 ```
-./
-├── README.md
-├── dist -> client-side public
-├── docs -> fractal components guide
+.
+├── .babelrc
+├── .browserslist
+├── .eslintrc
+├── .gitignore
+├── .sprite-png-template
+├── .sprite-svg-template
 ├── fractal.config.js
 ├── gulpfile.js
 ├── package.json
+├── README.md
+├── dist -> client-side public
+├── docs -> fractal components guide
 ├── src
 │   ├── docs
 │   │   ├── components
 │   │   │   ├── _preview.hbs.html
 │   │   │   └── headings.hbs
 │   │   └── index.md
-│   ├── fonts
 │   ├── img
-│   │   ├── site
-│   │   ├── page
 │   │   └── sprite
+│   │       ├── png
+│   │       └── svg
 │   ├── js
 │   │   └── app.js
 │   ├── pug
@@ -114,36 +109,32 @@ $ yarn run dist
 │   │   └── setting.json
 │   └── scss
 │       ├── app.scss
+│       ├── components
 │       ├── foundation
-│       │   ├── _variables.scss
 │       │   ├── base
-│       │   │   ├── _default.scss
-│       │   │   └── _normalize.scss
+│       │   │   └── _default.scss
 │       │   ├── functions
-│       │   │   ├── _font-size.scss
+│       │   │   ├── _rem.scss
+│       │   │   ├── _sprite.scss
 │       │   │   └── _z-index.scss
-│       │   └── mixins
-│       │       ├── _clearfix.scss
-│       │       ├── _media-queries-only.scss
-│       │       ├── _media-queries.scss
-│       │       ├── _placeholder.scss
-│       │       ├── _responsive_iframe.scss
-│       │       ├── _sprite-image-replace.scss
-│       │       └── _sprite.scss
+│       │   ├── mixins
+│       │   │   ├── _clearfix.scss
+│       │   │   ├── _media-queries-only.scss
+│       │   │   ├── _media-queries.scss
+│       │   │   ├── _placeholder.scss
+│       │   │   ├── _responsive-iframe.scss
+│       │   │   └── _sprite-image-replace.scss
+│       │   └── variables
+│       │       └── _variables.scss
 │       ├── layout
 │       │   ├── _container.scss
 │       │   ├── _footer.scss
 │       │   ├── _header.scss
 │       │   └── _sidebar.scss
-│       └── object
-│           ├── component
-│           ├── project
-│           ├── utility
-│           ├── vender-extensions
-│           └── venderes
-├── webpack.config.js
+│       ├── utility
+│       └── venders
+├── webpack.common.js
+├── webpack.dev.js
+├── webpack.prod.js
 └── yarn.lock
 ```
-
-
-

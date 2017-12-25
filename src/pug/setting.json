@@ -3,10 +3,11 @@
   "url": "",
   "page":{
     "top":{
-      "title": "site name",
+      "title": "",
       "description": "",
       "keywords": "",
-      "ogimage":""
+      "ogimage":"",
+      "url": ""
     }
   }
 }

@@ -1,0 +1,19 @@
+$sprites-png: (
+  {{#block "spritesheet"}}
+  sprite: (
+    width: {{spritesheet.px.width}},
+    height: {{spritesheet.px.height}},
+    imgPath: '{{{spritesheet.escaped_image}}}'
+  ),
+  {{/block}}
+{{#block "sprites"}}
+{{#each sprites}}
+  {{strings.name}}: (
+    width: {{px.width}},
+    height: {{px.height}},
+    backgroundX: {{px.offset_x}},
+    backgroundY: {{px.offset_y}},
+  ),
+  {{/each}}
+{{/block}}
+);

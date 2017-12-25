@@ -3,35 +3,23 @@
 // Foundation
 // ========================================
 @import "foundation/functions/*.*";
-@import "foundation/variables";
+@import "foundation/variables/*.*";
 @import "foundation/mixins/*.*";
-@import "foundation/base/normalize";
+@import "~normalize.css";
 @import "foundation/base/default";
+//========================================
+// Venders
+//========================================
+@import "venders/*.*";
 //========================================
 // Layout
 //========================================
-// @import "layout/*.*";
-// =======================================
-// Object
-// =======================================
-// ---------------------------
-// venderes
-// ---------------------------
-@import "object/venderes/*.*";
-@import "font-awesome";
-// ---------------------------
-// vender-extensions
-// ---------------------------
-@import "object/vender-extensions/*.*";
-// ---------------------------
-// Component
-// ---------------------------
-@import "object/component/*.*";
-// ---------------------------
-// Project
-// ---------------------------
-@import "object/project/*.*";
-// ---------------------------
+@import "layout/*.*";
+//========================================
+// Components
+//========================================
+@import "components/*.*";
+//========================================
 // Utility
-// ---------------------------
-@import "object/utility/*.*";
+//========================================
+@import "utility/*.*";
