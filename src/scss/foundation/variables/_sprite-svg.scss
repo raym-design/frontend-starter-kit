@@ -1,0 +1,37 @@
+$sprites-svg: (
+  sprite: (
+    width: 30px,
+    height: 150px,
+    imgPath: '../img/sprite.svg'
+  ),
+  icon_profile_facebook: (
+    width: 30px,
+    height: 30px,
+    backgroundX: 0px,
+    backgroundY: 0px,
+  ),
+  icon_profile_linkedin: (
+    width: 30px,
+    height: 30px,
+    backgroundX: 0px,
+    backgroundY: -30px,
+  ),
+  icon_profile_medium: (
+    width: 30px,
+    height: 30px,
+    backgroundX: 0px,
+    backgroundY: -60px,
+  ),
+  icon_profile_note: (
+    width: 25px,
+    height: 30px,
+    backgroundX: 0px,
+    backgroundY: -90px,
+  ),
+  icon_profile_site: (
+    width: 30px,
+    height: 30px,
+    backgroundX: 0px,
+    backgroundY: -120px,
+  ),
+);

@@ -7,9 +7,6 @@ const config = {
     filename: 'build.js',
     path: path.join(__dirname, 'dist/js'),
   },
-  externals: {
-    jquery: 'jQuery',
-  },
   module: {
     rules: [{
       test: /\.js$/,
