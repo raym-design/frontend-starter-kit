@@ -54,7 +54,7 @@
     "imagemin-mozjpeg": "^6.0.0",
     "imagemin-pngquant": "^5.0.1",
     "merge-stream": "^1.0.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "node-sass-package-importer": "^5.0.3",
     "run-sequence": "^2.2.0",
     "vinyl-buffer": "^1.0.0",
